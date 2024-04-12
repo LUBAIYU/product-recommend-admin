@@ -1,19 +1,24 @@
 <script setup lang="ts">
 import { ref } from 'vue'
+import { type ElForm, ElMessage } from 'element-plus'
+import { RegisterAPI } from '@/apis/user'
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
 //表单数据对象
 const form = ref({
-  username: '',
-  password: '',
+  userName: '',
+  userPassword: '',
   confirmPassword: ''
 })
 //表单引用对象
-const formRef = ref(null)
+const formRef = ref<InstanceType<typeof ElForm> | null>(null)
 
 //自定义校验规则
 const validateCode = (rule: any, value: string, callback: any) => {
   if (value === '') {
     callback(new Error('请确认密码！'))
-  } else if (value !== form.value.password) {
+  } else if (value !== form.value.userPassword) {
     callback(new Error('密码不一致！'))
   } else {
     callback()
@@ -22,11 +27,11 @@ const validateCode = (rule: any, value: string, callback: any) => {
 
 //表单校验规则
 const rules = {
-  username: [
+  userName: [
     { required: true, message: '用户名不能为空！', trigger: 'blur' },
     { min: 4, message: '用户名长度不能小于4位！' }
   ],
-  password: [
+  userPassword: [
     { required: true, message: '密码不能为空！', trigger: 'blur' },
     { min: 8, message: '密码长度不能小于8位！' }
   ],
@@ -36,7 +41,17 @@ const rules = {
 }
 
 const register = () => {
-
+  formRef.value?.validate(async (valid) => {
+    if (valid) {
+      const res = await RegisterAPI(form.value)
+      if (res.code === 200) {
+        ElMessage.success('注册成功')
+        await router.push('/login')
+      } else {
+        ElMessage.error(res.message)
+      }
+    }
+  })
 }
 </script>
 
@@ -51,11 +66,11 @@ const register = () => {
       </div>
       <div class="form-style">
         <el-form :model="form" ref="formRef" :rules="rules">
-          <el-form-item prop="username">
-            <el-input v-model="form.username" placeholder="请输入用户名" prefix-icon="User"></el-input>
+          <el-form-item prop="userName">
+            <el-input v-model="form.userName" placeholder="请输入用户名" prefix-icon="User"></el-input>
           </el-form-item>
-          <el-form-item prop="password">
-            <el-input v-model="form.password" placeholder="请输入密码" prefix-icon="Lock" show-password></el-input>
+          <el-form-item prop="userPassword">
+            <el-input v-model="form.userPassword" placeholder="请输入密码" prefix-icon="Lock" show-password></el-input>
           </el-form-item>
           <el-form-item prop="confirmPassword">
             <el-input v-model="form.confirmPassword" placeholder="请确认密码" prefix-icon="Check"

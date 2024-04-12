@@ -1,15 +1,18 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import ValidCode from '../components/ValidCode.vue'
+import { LoginAPI } from '@/apis/user'
+import { ElForm } from 'element-plus'
+
 //表单数据
 const form = ref({
-  username: '',
-  password: '',
+  userName: '',
+  userPassword: '',
   code: ''         //用户输入的验证码
 })
 //验证码组件生成的验证码
 const code = ref('')
-const loginRef = ref(null)
+const loginRef = ref<InstanceType<typeof ElForm> | null>(null)
 
 //自定义验证码校验
 const validateCode = (rule: any, value: string, callback: any) => {
@@ -24,11 +27,11 @@ const validateCode = (rule: any, value: string, callback: any) => {
 
 //表单校验规则
 const rules = {
-  username: [
+  userName: [
     { required: true, message: '用户名不能为空！', trigger: 'blur' },
     { min: 4, message: '用户名长度不能小于4位！' }
   ],
-  password: [
+  userPassword: [
     { required: true, message: '密码不能为空！', trigger: 'blur' },
     { min: 8, message: '密码长度不能小于8位！' }
   ],
@@ -38,6 +41,16 @@ const rules = {
 }
 //登录
 const login = () => {
+  loginRef.value?.validate(async (valid: any) => {
+    if (valid) {
+      const res = await LoginAPI(form.value)
+      if (res.code === 200) {
+        ElMessage.success('登录成功')
+      } else {
+        ElMessage.error(res.message)
+      }
+    }
+  })
 }
 
 //获取验证码
@@ -57,19 +70,17 @@ const getCode = (genCode: string) => {
       </div>
       <div class="form-style">
         <el-form :model="form" :rules="rules" ref="loginRef">
-          <el-form-item prop="username">
-            <el-input style="width: 300px;" v-model="form.username" placeholder="请输入用户名"
-                      prefix-icon="User"></el-input>
+          <el-form-item prop="userName">
+            <el-input v-model="form.userName" placeholder="请输入用户名" prefix-icon="User"></el-input>
           </el-form-item>
-          <el-form-item prop="password">
-            <el-input style="width: 300px;" v-model="form.password" placeholder="请输入密码"
-                      prefix-icon="Lock" show-password></el-input>
+          <el-form-item prop="userPassword">
+            <el-input v-model="form.userPassword" placeholder="请输入密码" prefix-icon="Lock" show-password></el-input>
           </el-form-item>
           <el-form-item prop="code">
             <div style="display: flex">
-              <el-input style="width: 150px" v-model="form.code" placeholder="请输入验证码"
+              <el-input style="flex: 1;height: 30px" v-model="form.code" placeholder="请输入验证码"
                         prefix-icon="Check"></el-input>
-              <div style="flex: 1; width: 150px; height: 36px;">
+              <div style="flex: 1;height: 30px">
                 <valid-code @update:value="getCode"></valid-code>
               </div>
             </div>
@@ -113,5 +124,9 @@ const getCode = (genCode: string) => {
   width: 300px;
   background-color: #0f9876;
   color: white;
+}
+
+.el-form-item {
+  margin-bottom: 20px;
 }
 </style>
