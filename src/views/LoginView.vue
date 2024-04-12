@@ -81,7 +81,7 @@ const getCode = (genCode: string) => {
       </div>
       <div style="text-align: center">还没有账号？请
         <span style="color: #0f9876;cursor: pointer;"
-              @click="$router.push(`/register`)">注册</span>
+              @click="$router.push('/register')">注册</span>
       </div>
     </div>
   </div>
