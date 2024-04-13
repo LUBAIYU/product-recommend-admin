@@ -53,6 +53,13 @@ const register = () => {
     }
   })
 }
+
+//回车触发注册
+document.onkeydown = (e: any) => {
+  if (e.key === 'Enter') {
+    register()
+  }
+}
 </script>
 
 <template>

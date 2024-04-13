@@ -57,6 +57,13 @@ const login = () => {
 const getCode = (genCode: string) => {
   code.value = genCode
 }
+
+//回车触发登录
+document.onkeydown = (e: any) => {
+  if (e.key === 'Enter') {
+    login()
+  }
+}
 </script>
 
 <template>
