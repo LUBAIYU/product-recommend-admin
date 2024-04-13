@@ -2,7 +2,7 @@
 import { ref } from 'vue'
 import ValidCode from '../components/ValidCode.vue'
 import { LoginAPI } from '@/apis/user'
-import { ElForm } from 'element-plus'
+import { ElForm, ElMessage } from 'element-plus'
 
 //表单数据
 const form = ref({
@@ -77,10 +77,10 @@ const getCode = (genCode: string) => {
             <el-input v-model="form.userPassword" placeholder="请输入密码" prefix-icon="Lock" show-password></el-input>
           </el-form-item>
           <el-form-item prop="code">
-            <div style="display: flex">
-              <el-input style="flex: 1;height: 30px" v-model="form.code" placeholder="请输入验证码"
+            <div style="display: flex; width: 300px">
+              <el-input style="flex: 1; width: 150px" v-model="form.code" placeholder="请输入验证码"
                         prefix-icon="Check"></el-input>
-              <div style="flex: 1;height: 30px">
+              <div style="flex: 1;height: 36px">
                 <valid-code @update:value="getCode"></valid-code>
               </div>
             </div>
