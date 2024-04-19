@@ -51,3 +51,8 @@
     justify-content: flex-end;
     align-items: center
 }
+
+/*去除默认的边框*/
+.el-tooltip__trigger {
+    outline: none;
+}

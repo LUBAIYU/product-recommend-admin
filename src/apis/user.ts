@@ -4,7 +4,7 @@ import request from '@/util/request'
 export const LoginAPI = (data: API.LoginParams) => {
   return request({
     method: 'POST',
-    url: '/login',
+    url: '/user/login',
     data
   }) as Promise<API.Result>
 }
@@ -13,7 +13,40 @@ export const LoginAPI = (data: API.LoginParams) => {
 export const RegisterAPI = (data: API.RegisterParams) => {
   return request({
     method: 'POST',
-    url: '/register',
+    url: '/user/register',
     data
+  }) as Promise<API.Result>
+}
+
+//退出登录
+export const logoutAPI = () => {
+  return request({
+    method: 'POST',
+    url: '/user/logout'
+  }) as Promise<API.Result>
+}
+
+//根据ID查询用户
+export const getUserByIdAPI = (id: number) => {
+  return request({
+    method: 'GET',
+    url: `/user/get/${id}`
+  }) as Promise<API.Result>
+}
+
+//根据ID修改用户信息
+export const updateUserByIdAPI = (data: API.UpdateUserParams) => {
+  return request({
+    method: 'POST',
+    url: '/user/update/info',
+    data
+  }) as Promise<API.Result>
+}
+
+//获取当前登录用户
+export const getLoginUserAPI = () => {
+  return request({
+    method: 'GET',
+    url: '/user/get/loginUser'
   }) as Promise<API.Result>
 }

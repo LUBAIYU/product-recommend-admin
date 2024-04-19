@@ -4,7 +4,8 @@ import axios from 'axios'
  * 统一请求配置
  */
 const request = axios.create({
-  baseURL: 'http://localhost:8080/user',
+  baseURL: 'http://localhost:8080',
+  withCredentials: true,
   timeout: 3000
 })
 
