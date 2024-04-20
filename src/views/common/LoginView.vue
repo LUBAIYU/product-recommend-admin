@@ -1,12 +1,11 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import ValidCode from '../components/ValidCode.vue'
+import ValidCode from '../../components/ValidCode.vue'
 import { LoginAPI } from '@/apis/user'
 import { ElForm, ElMessage } from 'element-plus'
 import { useRouter } from 'vue-router'
-import { useUserStore } from '@/stores/userStore'
+import { setCurrentUser } from '@/states/userState'
 
-const userStore = useUserStore()
 const router = useRouter()
 //表单数据
 const form = ref({
@@ -50,8 +49,8 @@ const login = () => {
       const res = await LoginAPI(form.value)
       if (res.code === 200) {
         ElMessage.success('登录成功')
-        userStore.setCurrentUser(res.data)
-        await router.push('/index')
+        setCurrentUser(res.data)
+        await router.push('/admin')
       } else {
         ElMessage.error(res.message)
       }
@@ -75,7 +74,7 @@ document.onkeydown = (e: any) => {
 <template>
   <div class="page-container">
     <div style="flex: 1;">
-      <img src="../assets/images/login.png" width="100%" alt="">
+      <img src="../../assets/images/login.png" width="100%" alt="">
     </div>
     <div style="flex: 1">
       <div class="title-style">

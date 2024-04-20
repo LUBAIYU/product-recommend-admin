@@ -1,11 +1,11 @@
 declare namespace API {
   type UserInfo = {
-    id: number,
+    id: number | string,
     userName: string,
     userAvatar: string,
     userPassword: string,
-    gender: number,
-    age: number,
+    gender: number | string,
+    age: number | string,
     phone: string,
     address: string,
     createTime: date,
@@ -37,5 +37,13 @@ declare namespace API {
     age: number,
     phone: string,
     address: string
+  };
+
+  type listUsersParams = {
+    current: number,
+    pageSize: number,
+    id?: number | string,
+    userName?: string,
+    gender?: number | string
   };
 }

@@ -65,7 +65,7 @@ document.onkeydown = (e: any) => {
 <template>
   <div class="page-container">
     <div style="flex: 1;">
-      <img src="../assets/images/register.png" width="100%" alt="">
+      <img src="../../assets/images/register.png" width="100%" alt="">
     </div>
     <div style="flex: 1;">
       <div class="title-style">

@@ -1,12 +1,11 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
-import { Expand, Fold, Star } from '@element-plus/icons-vue'
-import { logoutAPI } from '@/apis/user'
+import { Expand, Fold, Shop, UserFilled } from '@element-plus/icons-vue'
+import { getLoginUserAPI, logoutAPI } from '@/apis/user'
 import { useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
-import { useUserStore } from '@/stores/userStore'
+import { getCurrentUser, setCurrentUser } from '@/states/userState'
 
-const userStore = useUserStore()
 const router = useRouter()
 //控制侧边栏的折叠
 const isCollapse = ref(false)
@@ -29,13 +28,23 @@ const logout = async () => {
   }
 }
 
-onMounted(() => {
-  const loginUser = userStore.currentUser
-  if (!loginUser) {
-    ElMessage.error('未登录')
-    router.push('/login')
+//获取当前登录用户
+const getLoginUser = async () => {
+  const loginUser = getCurrentUser()
+  if (loginUser) {
+    return
   }
-})
+  const res = await getLoginUserAPI()
+  if (res.code === 200) {
+    setCurrentUser(res.data)
+  } else {
+    ElMessage.error(res.message)
+    await router.push('/login')
+  }
+}
+
+
+onMounted(() => getLoginUser())
 </script>
 
 <template>
@@ -44,7 +53,7 @@ onMounted(() => {
       <!--侧边栏-->
       <el-aside :width="asideWidth" style="min-height: 100vh; background-color: #001529;">
         <div class="logo">
-          <img alt="" src="../../public/favicon.ico" width="40px" height="40px">
+          <img alt="" src="../../../public/favicon.ico" width="40px" height="40px">
           <span class="logo-title" v-show="!isCollapse" style="margin-left: 10px">商品推荐系统</span>
         </div>
         <el-menu :collapse="isCollapse" :collapse-transition="false" background-color="#001529"
@@ -53,9 +62,15 @@ onMounted(() => {
                  active-text-color="#fff" router>
           <el-menu-item index="/product">
             <el-icon>
-              <Star />
+              <UserFilled />
             </el-icon>
-            <span>商品推荐</span>
+            <span>用户管理</span>
+          </el-menu-item>
+          <el-menu-item index="/user">
+            <el-icon>
+              <Shop />
+            </el-icon>
+            <span>商品管理</span>
           </el-menu-item>
         </el-menu>
       </el-aside>
@@ -69,7 +84,7 @@ onMounted(() => {
           <div class="dropdown-style">
             <el-dropdown>
               <div style="display: flex; justify-content: center; align-items: center">
-                <img src="../../public/favicon.ico" alt="" width="40px" height="40px" style="margin: 0 5px">
+                <img src="../../../public/favicon.ico" alt="" width="40px" height="40px" style="margin: 0 5px">
                 <span>张三</span>
               </div>
               <template #dropdown>

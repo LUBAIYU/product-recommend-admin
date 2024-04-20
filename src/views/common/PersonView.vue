@@ -3,10 +3,9 @@ import { onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { Plus } from '@element-plus/icons-vue'
 import { ElMessage } from 'element-plus'
-import { getLoginUserAPI, updateUserByIdAPI } from '@/apis/user'
-import { useUserStore } from '@/stores/userStore'
+import { updateUserByIdAPI } from '@/apis/user'
+import { getCurrentUser } from '@/states/userState'
 
-const userStore = useUserStore()
 const router = useRouter()
 //用户信息
 const userInfo = ref<API.UserInfo>({
@@ -54,24 +53,12 @@ const updateUserInfo = async () => {
   }
 }
 
-//获取登录用户
-const getLoginUser = async () => {
-  const loginUser = userStore.getCurrentUser()
+onMounted(() => {
+  const loginUser = getCurrentUser()
   if (loginUser) {
     userInfo.value = loginUser
-    return
   }
-  const res = await getLoginUserAPI()
-  if (res.code === 200) {
-    userStore.setCurrentUser(res.data)
-    userInfo.value = res.data
-  } else {
-    ElMessage.error(res.message)
-    await router.push('/login')
-  }
-}
-
-onMounted(() => getLoginUser())
+})
 </script>
 
 <template>

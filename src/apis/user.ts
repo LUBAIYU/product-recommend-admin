@@ -50,3 +50,20 @@ export const getLoginUserAPI = () => {
     url: '/user/get/loginUser'
   }) as Promise<API.Result>
 }
+
+//分页条件查询用户
+export const listUsersByPageAPI = (data: API.listUsersParams) => {
+  return request({
+    method: 'GET',
+    url: '/user/page',
+    params: data
+  }) as Promise<API.Result>
+}
+
+//删除用户
+export const delUserByIdAPI = (id: number) => {
+  return request({
+    method: 'DELETE',
+    url: `/user/delete/${id}`
+  }) as Promise<API.Result>
+}

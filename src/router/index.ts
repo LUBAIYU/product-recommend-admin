@@ -10,22 +10,27 @@ const router = createRouter({
     {
       path: '/login',
       name: 'login',
-      component: () => import('../views/LoginView.vue')
+      component: () => import('../views/common/LoginView.vue')
     },
     {
       path: '/register',
       name: 'register',
-      component: () => import('../views/RegisterView.vue')
+      component: () => import('../views/common/RegisterView.vue')
     },
     {
-      path: '/index',
-      name: 'index',
-      component: () => import('../views/index.vue'),
+      path: '/admin',
+      name: 'admin',
+      component: () => import('../views/admin/index.vue'),
       children: [
         {
           path: 'person',
           name: 'person',
-          component: () => import('../views/PersonView.vue')
+          component: () => import('../views/common/PersonView.vue')
+        },
+        {
+          path: 'manage',
+          name: 'manage',
+          component: () => import('../views/admin/UserManage.vue')
         }
       ]
     }
