@@ -46,4 +46,24 @@ declare namespace API {
     userName?: string,
     gender?: number | string
   };
+
+  type ProductInfo = {
+    id: number | string,
+    name: string,
+    image: string,
+    description: string,
+    price: number | string,
+    stock: number | string,
+    status: number | string,
+    createTime: date,
+    updateTime: date
+  }
+
+  type listProductsParams = {
+    current: number,
+    pageSize: number,
+    id?: number | string,
+    name?: string,
+    status?: number | string
+  };
 }
