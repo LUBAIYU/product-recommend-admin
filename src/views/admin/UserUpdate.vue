@@ -2,6 +2,7 @@
 import { ref } from 'vue'
 import { Plus } from '@element-plus/icons-vue'
 import { ElMessage } from 'element-plus'
+import { updateUserByIdAPI } from '@/apis/user'
 
 const props = defineProps([
   //控制弹窗显示隐藏
@@ -80,6 +81,20 @@ const initForm = (data: API.UserInfo) => {
   form.value = data
 }
 
+//修改用户信息
+const updateUserInfo = async () => {
+  const res = await updateUserByIdAPI({
+    ...form.value
+  } as API.UpdateUserParams)
+  if (res.code === 200) {
+    ElMessage.success('修改成功')
+    emit('update:isVisible')
+    emit('getTableData')
+  } else {
+    ElMessage.error(res.message)
+  }
+}
+
 defineExpose({
   initForm
 })
@@ -130,7 +145,7 @@ defineExpose({
     </el-form>
     <template #footer>
         <span style="display: flex; justify-content: center;align-items: center; margin-top: -15px">
-          <el-button type="primary">保存</el-button>
+          <el-button type="primary" @click="updateUserInfo">保存</el-button>
           <el-button type="info" @click="close">取消</el-button>
         </span>
     </template>

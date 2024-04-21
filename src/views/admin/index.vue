@@ -11,6 +11,8 @@ const router = useRouter()
 const isCollapse = ref(false)
 //侧边栏宽度
 const asideWidth = ref('200px')
+//登录用户名称
+const userName = ref('')
 
 //控制菜单的展开与折叠
 const handleCollapse = () => {
@@ -22,6 +24,7 @@ const handleCollapse = () => {
 const logout = async () => {
   const res = await logoutAPI()
   if (res.code === 200) {
+    setCurrentUser(null)
     await router.push('/login')
   } else {
     ElMessage.error(res.message)
@@ -32,6 +35,7 @@ const logout = async () => {
 const getLoginUser = async () => {
   const loginUser = getCurrentUser()
   if (loginUser) {
+    userName.value = loginUser.userName
     return
   }
   const res = await getLoginUserAPI()
@@ -42,7 +46,6 @@ const getLoginUser = async () => {
     await router.push('/login')
   }
 }
-
 
 onMounted(() => getLoginUser())
 </script>
@@ -60,13 +63,13 @@ onMounted(() => getLoginUser())
                  style="border: none;" default-active="/product"
                  text-color="rgba(255,255,255,0.65)"
                  active-text-color="#fff" router>
-          <el-menu-item index="/product">
+          <el-menu-item index="/admin/manage">
             <el-icon>
               <UserFilled />
             </el-icon>
             <span>用户管理</span>
           </el-menu-item>
-          <el-menu-item index="/user">
+          <el-menu-item index="/admin/product">
             <el-icon>
               <Shop />
             </el-icon>
@@ -85,11 +88,11 @@ onMounted(() => getLoginUser())
             <el-dropdown>
               <div style="display: flex; justify-content: center; align-items: center">
                 <img src="../../../public/favicon.ico" alt="" width="40px" height="40px" style="margin: 0 5px">
-                <span>张三</span>
+                <span>{{ userName }}</span>
               </div>
               <template #dropdown>
                 <el-dropdown-menu>
-                  <el-dropdown-item @click="$router.push('/index/person')">个人信息</el-dropdown-item>
+                  <el-dropdown-item @click="$router.push('/admin/person')">个人信息</el-dropdown-item>
                   <el-dropdown-item @click="logout">退出登录</el-dropdown-item>
                 </el-dropdown-menu>
               </template>

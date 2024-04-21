@@ -1,10 +1,10 @@
-let currentUser: API.UserInfo
+let currentUser: API.UserInfo | null
 
-const setCurrentUser = (user: API.UserInfo) => {
+const setCurrentUser = (user: API.UserInfo | null) => {
   currentUser = user
 }
 
-const getCurrentUser = (): API.UserInfo => {
+const getCurrentUser = (): API.UserInfo | null => {
   return currentUser
 }
 

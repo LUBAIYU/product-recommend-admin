@@ -81,6 +81,8 @@ const delUserById = (id: number) => {
     } else {
       ElMessage.error(res.message)
     }
+  }).catch(() => {
+    ElMessage.info('已取消删除')
   })
 }
 
