@@ -50,7 +50,7 @@ const login = () => {
       if (res.code === 200) {
         ElMessage.success('登录成功')
         setCurrentUser(res.data)
-        await router.push('/admin')
+        await router.push('/admin/user-manage')
       } else {
         ElMessage.error(res.message)
       }

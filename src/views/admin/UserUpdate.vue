@@ -110,7 +110,8 @@ defineExpose({
             class="avatar-uploader"
             action="http://localhost:8080/user/upload/avatar"
             :show-file-list="false"
-            :on-success="uploadSuccess">
+            :on-success="uploadSuccess"
+            with-credentials="with-credentials">
             <img v-if="form.userAvatar" :src="form.userAvatar" class="avatar" alt="">
             <el-icon v-else class="avatar-uploader-icon">
               <Plus />

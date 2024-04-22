@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
 import { Expand, Fold, Shop, UserFilled } from '@element-plus/icons-vue'
-import { getLoginUserAPI, logoutAPI } from '@/apis/user'
+import { logoutAPI } from '@/apis/user'
 import { useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
 import { getCurrentUser, setCurrentUser } from '@/states/userState'
@@ -38,13 +38,7 @@ const getLoginUser = async () => {
     userName.value = loginUser.userName
     return
   }
-  const res = await getLoginUserAPI()
-  if (res.code === 200) {
-    setCurrentUser(res.data)
-  } else {
-    ElMessage.error(res.message)
-    await router.push('/login')
-  }
+  await router.push('/login')
 }
 
 onMounted(() => getLoginUser())
@@ -60,16 +54,16 @@ onMounted(() => getLoginUser())
           <span class="logo-title" v-show="!isCollapse" style="margin-left: 10px">商品推荐系统</span>
         </div>
         <el-menu :collapse="isCollapse" :collapse-transition="false" background-color="#001529"
-                 style="border: none;" default-active="/product"
+                 style="border: none;" :default-active="$route.path"
                  text-color="rgba(255,255,255,0.65)"
                  active-text-color="#fff" router>
-          <el-menu-item index="/admin/manage">
+          <el-menu-item index="/admin/user-manage">
             <el-icon>
               <UserFilled />
             </el-icon>
             <span>用户管理</span>
           </el-menu-item>
-          <el-menu-item index="/admin/product">
+          <el-menu-item index="/admin/product-manage">
             <el-icon>
               <Shop />
             </el-icon>

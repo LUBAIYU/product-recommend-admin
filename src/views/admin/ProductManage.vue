@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
 import { type ElForm, ElMessage, ElMessageBox } from 'element-plus'
-import { delProductByIdAPI, listProductsByPageAPI } from '@/apis/product'
+import { alterStatusAPI, delProductByIdAPI, listProductsByPageAPI } from '@/apis/product'
 import ProductUpdate from '@/views/admin/ProductUpdate.vue'
 import ProductAdd from '@/views/admin/ProductAdd.vue'
 
@@ -89,6 +89,22 @@ const delProductById = (id: number) => {
   })
 }
 
+//修改商品状态
+const alterStatus = async (id: number | string, status: number | string) => {
+  if (status === 0) {
+    status = 1
+  } else {
+    status = 0
+  }
+  const res = await alterStatusAPI(id, status)
+  if (res.code === 200) {
+    ElMessage.success('修改成功')
+    await getTableData()
+  } else {
+    ElMessage.error(res.message)
+  }
+}
+
 const closeUpdateDialog = () => {
   isUpdateVisible.value = false
 }
@@ -143,7 +159,10 @@ onMounted(() => getTableData())
       <el-table-column prop="description" label="描述" align="center" header-align="center"></el-table-column>
       <el-table-column label="状态" align="center" header-align="center">
         <template #default="scope">
-          {{ scope.row.status === 0 ? '上架' : '下架' }}
+          <span style="display: flex; align-items: center; justify-content: center">
+            <i class="circle-icon" :class="{enabled:scope?.row.status===0,disabled:scope?.row.status===1}"></i>
+            {{ scope.row.status === 0 ? '上架' : '下架' }}
+          </span>
         </template>
       </el-table-column>
       <el-table-column prop="price" label="价格" align="center" header-align="center"></el-table-column>
@@ -153,8 +172,10 @@ onMounted(() => getTableData())
       <el-table-column prop="operation" label="操作" align="center" header-align="center" width="180px">
         <template #default="scope">
           <el-button type="text" @click="openUpdateDialog(scope?.row)">编辑</el-button>
-          <el-button type="text" @click="delProductById(scope?.row.id)">删除</el-button>
-          <el-button type="text">上架</el-button>
+          <el-button type="text" style="color: red" @click="delProductById(scope?.row.id)">删除</el-button>
+          <el-button type="text" @click="alterStatus(scope?.row.id,scope?.row.status)">
+            <span :class="{drop:scope?.row.status===0}">{{ scope.row.status === 0 ? '下架' : '上架' }}</span>
+          </el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -178,5 +199,26 @@ onMounted(() => getTableData())
 </template>
 
 <style scoped>
+/* 圆形图标 */
+.circle-icon {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  margin-right: 5px;
+}
 
+/* 上架状态图标颜色 */
+.enabled {
+  background-color: #0f9876;
+}
+
+/* 下架状态文字颜色 */
+.drop {
+  color: red;
+}
+
+/* 下架状态图标颜色 */
+.disabled {
+  background-color: gray;
+}
 </style>

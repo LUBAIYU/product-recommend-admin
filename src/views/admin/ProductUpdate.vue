@@ -90,14 +90,15 @@ defineExpose({
 <template>
   <el-dialog :model-value="props.isVisible" :before-close="handleDialogClose" width="30%">
     <el-form :model="form" ref="formRef" label-width="80px">
-      <el-form-item label="图片" prop="userAvatar">
+      <el-form-item label="图片" prop="image">
         <div>
           <el-upload
             name="multipartFile"
             class="avatar-uploader"
-            action="http://localhost:8080/user/upload/avatar"
+            action="http://localhost:8080/product/upload/image"
             :show-file-list="false"
-            :on-success="uploadSuccess">
+            :on-success="uploadSuccess"
+            with-credentials="with-credentials">
             <img v-if="form.image" :src="form.image" class="avatar" alt="">
             <el-icon v-else class="avatar-uploader-icon">
               <Plus />
@@ -112,10 +113,10 @@ defineExpose({
         <el-input v-model="form.description" style="width: 280px"></el-input>
       </el-form-item>
       <el-form-item label="价格" prop="price">
-        <el-input v-model="form.price" style="width: 280px"></el-input>
+        <el-input-number min="0" v-model="form.price" style="width: 280px"></el-input-number>
       </el-form-item>
       <el-form-item label="库存" prop="stock">
-        <el-input v-model="form.stock" style="width: 280px"></el-input>
+        <el-input-number min="0" v-model="form.stock" style="width: 280px"></el-input-number>
       </el-form-item>
       <el-form-item label="创建时间" prop="createTime">
         <el-input v-model="form.createTime" readonly style="width: 280px"></el-input>

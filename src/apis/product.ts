@@ -34,3 +34,15 @@ export const listProductsByPageAPI = (data: API.listProductsParams) => {
     params: data
   }) as Promise<API.Result>
 }
+
+//改变商品状态
+export const alterStatusAPI = (id: number | string, status: number | string) => {
+  return request({
+    method: 'PUT',
+    url: '/product/alter/status',
+    params: {
+      id,
+      status
+    }
+  }) as Promise<API.Result>
+}

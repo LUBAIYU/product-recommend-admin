@@ -28,13 +28,13 @@ const router = createRouter({
           component: () => import('../views/common/PersonView.vue')
         },
         {
-          path: 'manage',
-          name: 'manage',
+          path: 'user-manage',
+          name: 'user-manage',
           component: () => import('../views/admin/UserManage.vue')
         },
         {
-          path: 'product',
-          name: 'product',
+          path: 'product-manage',
+          name: 'product-manage',
           component: () => import('../views/admin/ProductManage.vue')
         }
       ]

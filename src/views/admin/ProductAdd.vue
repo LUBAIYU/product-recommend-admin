@@ -91,14 +91,15 @@ const addProductInfo = async () => {
 <template>
   <el-dialog :model-value="props.isVisible" :before-close="handleDialogClose" width="30%">
     <el-form :model="form" ref="formRef" label-width="80px">
-      <el-form-item label="图片" prop="userAvatar">
+      <el-form-item label="图片" prop="image">
         <div>
           <el-upload
             name="multipartFile"
             class="avatar-uploader"
-            action="http://localhost:8080/user/upload/avatar"
+            action="http://localhost:8080/product/upload/image"
             :show-file-list="false"
-            :on-success="uploadSuccess">
+            :on-success="uploadSuccess"
+            with-credentials="with-credentials">
             <img v-if="form.image" :src="form.image" class="avatar" alt="">
             <el-icon v-else class="avatar-uploader-icon">
               <Plus />
