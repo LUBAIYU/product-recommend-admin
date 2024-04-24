@@ -43,22 +43,18 @@ const uploadSuccess = (res: API.Result) => {
 }
 
 const handleDialogClose = () => {
-  form.value = {
-    createTime: '',
-    description: '',
-    id: '',
-    image: '',
-    name: '',
-    price: '',
-    status: '',
-    stock: '',
-    updateTime: ''
-  }
+  clear()
   emit('update:isVisible')
 }
 
 //取消编辑
 const close = () => {
+  clear()
+  emit('update:isVisible')
+}
+
+//清空表单
+const clear = () => {
   form.value = {
     createTime: '',
     description: '',
@@ -70,8 +66,8 @@ const close = () => {
     stock: '',
     updateTime: ''
   }
-  emit('update:isVisible')
 }
+
 
 //新增商品
 const addProductInfo = async () => {
@@ -80,6 +76,7 @@ const addProductInfo = async () => {
   })
   if (res.code === 200) {
     ElMessage.success('新增成功')
+    clear()
     emit('update:isVisible')
     emit('getTableData')
   } else {

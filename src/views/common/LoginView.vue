@@ -4,8 +4,9 @@ import ValidCode from '../../components/ValidCode.vue'
 import { LoginAPI } from '@/apis/user'
 import { ElForm, ElMessage } from 'element-plus'
 import { useRouter } from 'vue-router'
-import { setCurrentUser } from '@/states/userState'
+import { useUserStore } from '@/stores/userStore'
 
+const userStore = useUserStore()
 const router = useRouter()
 //表单数据
 const form = ref({
@@ -49,7 +50,7 @@ const login = () => {
       const res = await LoginAPI(form.value)
       if (res.code === 200) {
         ElMessage.success('登录成功')
-        setCurrentUser(res.data)
+        userStore.setCurrentUser(res.data)
         await router.push('/admin/user-manage')
       } else {
         ElMessage.error(res.message)

@@ -4,8 +4,9 @@ import { useRouter } from 'vue-router'
 import { Plus } from '@element-plus/icons-vue'
 import { ElMessage } from 'element-plus'
 import { updateUserByIdAPI } from '@/apis/user'
-import { getCurrentUser } from '@/states/userState'
+import { useUserStore } from '@/stores/userStore'
 
+const userStore = useUserStore()
 const router = useRouter()
 //用户信息
 const userInfo = ref<API.UserInfo>({
@@ -44,7 +45,9 @@ const uploadSuccess = (res: API.Result) => {
 
 //修改用户信息
 const updateUserInfo = async () => {
-  const res = await updateUserByIdAPI(userInfo.value)
+  const res = await updateUserByIdAPI({
+    ...userInfo.value
+  } as API.UpdateUserParams)
   if (res.code === 200) {
     ElMessage.success('修改成功')
     router.back()
@@ -54,7 +57,7 @@ const updateUserInfo = async () => {
 }
 
 onMounted(() => {
-  const loginUser = getCurrentUser()
+  const loginUser = userStore.getCurrentUser()
   if (loginUser) {
     userInfo.value = loginUser
   }

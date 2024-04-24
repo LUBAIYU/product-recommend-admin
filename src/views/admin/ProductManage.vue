@@ -38,10 +38,12 @@ const productAddRef = ref(null)
 //更改页面
 const handleCurrentChange = (val: number) => {
   current.value = val
+  getTableData()
 }
 //更改每页记录数
 const handlePageSizeChange = (val: number) => {
   pageSize.value = val
+  getTableData()
 }
 
 //获取表格数据

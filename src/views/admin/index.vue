@@ -1,11 +1,12 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
 import { Expand, Fold, Shop, UserFilled } from '@element-plus/icons-vue'
-import { logoutAPI } from '@/apis/user'
+import { getLoginUserAPI, logoutAPI } from '@/apis/user'
 import { useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
-import { getCurrentUser, setCurrentUser } from '@/states/userState'
+import { useUserStore } from '@/stores/userStore'
 
+const userStore = useUserStore()
 const router = useRouter()
 //控制侧边栏的折叠
 const isCollapse = ref(false)
@@ -24,7 +25,7 @@ const handleCollapse = () => {
 const logout = async () => {
   const res = await logoutAPI()
   if (res.code === 200) {
-    setCurrentUser(null)
+    userStore.setCurrentUser(undefined)
     await router.push('/login')
   } else {
     ElMessage.error(res.message)
@@ -33,9 +34,15 @@ const logout = async () => {
 
 //获取当前登录用户
 const getLoginUser = async () => {
-  const loginUser = getCurrentUser()
+  let loginUser = userStore.getCurrentUser()
   if (loginUser) {
     userName.value = loginUser.userName
+    return
+  }
+  const res = await getLoginUserAPI()
+  if (res.code === 200) {
+    userName.value = res.data.userName
+    userStore.setCurrentUser(res.data)
     return
   }
   await router.push('/login')
